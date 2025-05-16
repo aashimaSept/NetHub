@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Log In / Sign Up </title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css"
+    />
+    <link rel="stylesheet" href="login.css" />
+    <style>
+      .error-message {
+        color: #ff3366;
+        font-size: 12px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        display: none;
+      }
+      .success-message {
+        color: #28a745;
+        font-size: 12px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="ttr_banner_slideshow"></div>
+
+    <div class="section">
+      <div class="container">
+        <div class="row full-height justify-content-center">
+          <div class="col-12 text-center align-self-center py-5">
+            <div class="section pb-5 pt-5 pt-sm-2 text-center">
+              <h3 class="mb-0 pb-3">
+                <span>Log In</span><span>Sign Up</span>
+              </h3>
+              <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+              <label for="reg-log"></label>
+              <div class="card-3d-wrap mx-auto">
+                <div class="card-3d-wrapper">
+                  <div class="card-front">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Log In</h4>
+                        <div class="form-group">
+                          <input
+                            type="email"
+                            name="logemail"
+                            class="form-style"
+                            placeholder="Your Email"
+                            id="loginEmail"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input
+                            type="password"
+                            name="logpass"
+                            class="form-style"
+                            placeholder="Your Password"
+                            id="loginPass"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <div id="loginError" class="error-message"></div>
+                        <div id="loginSuccess" class="success-message"></div>
+                        <a href="javascript:void(0);" class="btn mt-4" onclick="login()">Submit</a>
+                        <p class="mb-0 mt-4 text-center">
+                          <a href="#0" class="link">Forgot your password?</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-back">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Sign Up</h4>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            name="logname"
+                            class="form-style"
+                            placeholder="Your Full Name"
+                            id="signupName"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-user"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input
+                            type="email"
+                            name="logemail"
+                            class="form-style"
+                            placeholder="Your Email"
+                            id="signupEmail"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input
+                            type="password"
+                            name="logpass"
+                            class="form-style"
+                            placeholder="Your Password"
+                            id="signupPass"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <div id="signupError" class="error-message"></div>
+                        <div id="signupSuccess" class="success-message"></div>
+                        <a href="javascript:void(0);" class="btn mt-4" onclick="signup()">Submit</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Function to check if user already exists
+      function userExists(email) {
+        // Get all registered users from localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Check if email already exists
+        return users.some(user => user.email === email);
+      }
+      
+      // Function to register a new user
+      function signup() {
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPass').value;
+        const errorElement = document.getElementById('signupError');
+        const successElement = document.getElementById('signupSuccess');
+        
+        // Hide any previous messages
+        errorElement.style.display = 'none';
+        successElement.style.display = 'none';
+        
+        // Validate inputs
+        if (!name || !email || !password) {
+          errorElement.textContent = "Please fill out all fields.";
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Check if email is already registered
+        if (userExists(email)) {
+          errorElement.textContent = "This email is already registered. Please login instead.";
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Get existing users or initialize empty array
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Add new user
+        users.push({
+          name,
+          email,
+          password // Note: In a real application, passwords should be hashed
+        });
+        
+        // Save updated users array
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Show success message
+        successElement.textContent = "Account created successfully! Redirecting to login...";
+        successElement.style.display = 'block';
+        
+        // Clear form fields
+        document.getElementById('signupName').value = '';
+        document.getElementById('signupEmail').value = '';
+        document.getElementById('signupPass').value = '';
+        
+        // Switch to login form after a brief delay
+        setTimeout(function() {
+          // Toggle the checkbox to switch to login form
+          document.getElementById('reg-log').checked = false;
+          
+          // Pre-fill email field on login form
+          document.getElementById('loginEmail').value = email;
+          
+          // Show welcome message
+          document.getElementById('loginSuccess').textContent = "Registration successful! Please log in with your credentials.";
+          document.getElementById('loginSuccess').style.display = 'block';
+        }, 1500);
+      }
+      
+      // Function to login a user
+      function login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPass').value;
+        const errorElement = document.getElementById('loginError');
+        const successElement = document.getElementById('loginSuccess');
+        
+        // Hide any previous error messages
+        errorElement.style.display = 'none';
+        
+        // Validate inputs
+        if (!email || !password) {
+          errorElement.textContent = "Please fill out all fields.";
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Get registered users
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Find user with matching email and password
+        const user = users.find(user => user.email === email && user.password === password);
+        
+        if (user) {
+          // Store current user info
+          localStorage.setItem('currentUser', JSON.stringify({ name: user.name, email: user.email }));
+          
+          // Show success message before redirecting
+          successElement.textContent = "Login successful! Redirecting...";
+          successElement.style.display = 'block';
+          
+          // Redirect to home page after a brief delay
+          setTimeout(function() {
+            window.location.href = "index2.html";
+          }, 1000);
+        } else {
+          // Show error message
+          errorElement.textContent = "Invalid email or password.";
+          errorElement.style.display = 'block';
+        }
+      }
+      
+      // Check if we have a registration success message in URL parameters
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const registrationSuccess = urlParams.get('registration');
+        
+        if (registrationSuccess === 'success') {
+          // Switch to login form
+          document.getElementById('reg-log').checked = false;
+          
+          // Show success message
+          document.getElementById('loginSuccess').textContent = "Registration successful! Please log in with your credentials.";
+          document.getElementById('loginSuccess').style.display = 'block';
+        }
+      };
+    </script>
+  </body>
+</html>

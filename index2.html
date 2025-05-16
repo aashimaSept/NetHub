@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetHub</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+            background-color: #0f0f0f;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .red {
+            color: #e50914;
+        }
+
+        .white {
+            color: #fff;
+        }
+
+        .right-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .button-container {
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .button-container:hover {
+            color: #e50914;
+        }
+
+        .button-container h2 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Content Area */
+        .content {
+            padding-top: 60px;
+        }
+
+        .mid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Section Styles */
+        .content-area {
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .content-title {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Video Grid Layout (YouTube-style) */
+        .card-carousel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .carousel-item {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-item iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Search Area */
+        .search-area {
+            padding: 40px 0;
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .search-area-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-area-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .search-area-content p {
+            margin-bottom: 20px;
+            color: #aaa;
+        }
+
+        .search-area-content form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #search-text {
+            width: 70%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        #search-btn {
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #search-btn:hover {
+            background-color: #ff0f1b;
+        }
+
+        /* Search Results Grid */
+        #my-div {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        #my-div > div {
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        #my-div > div:hover {
+            transform: translateY(-5px);
+        }
+
+        #my-div a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #my-div img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        #my-div h4 {
+            padding: 10px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        #my-div p {
+            padding: 0 10px 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Contact Form */
+        .contact {
+            padding: 60px 20px;
+            background-color: #1f1f1f;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .heading-text {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .width-100 {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        form button {
+            background-color: #e50914;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        form button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        form button:hover {
+            background-color: #ff0f1b;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0f0f0f;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .width-33 {
+            width: 33%;
+            margin-bottom: 20px;
+        }
+
+        .width-33 h3 {
+            margin-bottom: 10px;
+            color: #e50914;
+        }
+
+        .width-33 p {
+            color: #aaa;
+        }
+
+        .width-33 a {
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .width-33 a:hover {
+            color: #e50914;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #e50914;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            background-color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: #e50914;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .card-carousel {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .right-nav {
+                display: none;
+            }
+            
+            .width-33 {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-carousel {
+                grid-template-columns: 1fr;
+            }
+            
+            #my-div {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="header">
+            <div class="brand">
+                <h1 class="red">Net</h1>
+                <h1 class="white">Hub</h1>
+            </div>
+            <div class="right-nav">
+                <a href="./index2.html" class="button-container">
+                    <h2>Home</h2>
+                </a>
+                <a href="#movies" class="button-container">
+                    <h2>Movies</h2>
+                </a>
+                <a href="./aboutus.html" class="button-container">
+                    <h2>About Us</h2>
+                </a>
+                <a href="#contact" class="button-container">
+                    <h2>Contact Us</h2>
+                </a>
+                <a href="#search" class="button-container">
+                    <h2>Search</h2>
+                </a>
+            </div>
+        </div>
+
+        <div class="mid">
+            <div class="content-area" id="trending">
+                <h2 class="content-title">TRENDING</h2>
+                <div class="card-carousel">
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/IYGG55qwQZQ" title="Apple iPhone Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/ybLZyY655iY" title="28 Years Later - Official Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/izXUSd2GsGo" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area" id="releases">
+                <h2 class="content-title">NEW RELEASES</h2>
+                <div class="card-carousel">
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/IYGG55qwQZQ" title="Apple iPhone Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/ybLZyY655iY" title="28 Years Later - Official Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/izXUSd2GsGo" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/FlrcShiTPgA" title="The Roses (2025) Official Trailer" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area" id="movies">
+                <h2 class="content-title">MOVIES</h2>
+                <div class="card-carousel">
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/jWldQyMeolI" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/svJaA8NhjCg" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/MrtExmicVko" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/bs_nFwh5eJw" title="Drop - Official Trailer (2025)" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <h2 class="content-title">DRAMA</h2>
+                <div class="card-carousel">
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/qqKmoeQlHw4" title="The Best New Movies 2025 (Trailers)" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/bs_nFwh5eJw" title="Drop - Official Trailer (2025)" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/FlrcShiTPgA" title="The Roses (2025) Official Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/MrtExmicVko" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <h2 class="content-title">THRILLER</h2>
+                <div class="card-carousel">
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/MrtExmicVko" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/qqKmoeQlHw4" title="Shaila (2025) – Official Trailer" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/izXUSd2GsGo" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                    <div class="carousel-item">
+                        <iframe src="https://www.youtube.com/embed/svJaA8NhjCg" title="YouTube video player" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Area -->
+            <div class="search-area" id="search">
+                <div class="search-area-content">
+                    <h2>Can't Find Anything You Like?</h2>
+                    <p>Explore our collection for thousands of unique movies.</p>
+                    <form>
+                        <input id="search-text" placeholder="Search..." type="text" />
+                        <button id="search-btn" type="button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+                <div id="my-div"></div>
+            </div>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="contact" id="contact">
+            <div class="container">
+                <h2 class="heading-text">Get In Touch</h2>
+                <div class="width-100">
+                    <form method="post" action="https://script.google.com/macros/s/AKfycbxtdMtvHsZUSxOP38mQBtQ8jt1mGLl85pkiGDQztfPD0DD2ZG7kLeEEo_fqCCB5kxSg/exec" name="contact-form">
+                        <input type="text" name="your-name" placeholder="Full Name...">
+                        <input type="text" name="your-email" placeholder="Full Email Id...">
+                        <input type="text" name="your-number" placeholder="Full Mobile No...">
+                        <textarea name="message" rows="7" placeholder="Enter Message..."></textarea>
+                        <button type="submit" value="Submit" id="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer style="background-color: #141414; padding: 50px 0 30px; border-top: 1px solid #333;">
+            <div class="footer-content" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between;">
+                <div style="width: 33.33%; padding: 0 15px; margin-bottom: 30px; text-align: center; box-sizing: border-box;">
+                    <h3 style="margin-bottom: 15px;">
+                        <i class="fa fa-map-marker" style="font-size: 28px; color: #e50914; background-color: rgba(229, 9, 20, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; transition: all 0.3s ease;"></i>
+                    </h3>
+                    <p style="color: #aaa; font-size: 1rem; line-height: 1.5;">Chitkara University, Himachal Pradesh</p>
+                </div>
+                <div style="width: 33.33%; padding: 0 15px; margin-bottom: 30px; text-align: center; box-sizing: border-box;">
+                    <h3 style="margin-bottom: 15px;">
+                        <i class="fa fa-phone" style="font-size: 28px; color: #e50914; background-color: rgba(229, 9, 20, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; transition: all 0.3s ease;"></i>
+                    </h3>
+                    <p style="color: #aaa; font-size: 1rem; line-height: 1.5;">+91 8699387039</p>
+                </div>
+                <div style="width: 33.33%; padding: 0 15px; margin-bottom: 30px; text-align: center; box-sizing: border-box;">
+                    <h3 style="margin-bottom: 15px;">
+                        <i class="fa fa-envelope-o" style="font-size: 28px; color: #e50914; background-color: rgba(229, 9, 20, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; transition: all 0.3s ease;"></i>
+                    </h3>
+                    <p style="color: #aaa; font-size: 1rem; line-height: 1.5;"><a href="mailto:malhotraaashima@gmail.com" style="color: #aaa; text-decoration: none; transition: color 0.3s ease;">malhotraaashima@gmail.com</a></p>
+                </div>
+                
+                <p style="width: 100%; text-align: center; color: #999; font-size: 0.9rem; margin: 20px 0; padding-top: 20px; border-top: 1px solid #333;"> Copyright &copy; 2025 NetHub</p>
+                
+                <ul style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin: 20px 0; list-style: none; padding: 0;">
+                    <li><a href="#contact" style="color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; position: relative;">Contact Us</a></li>
+                    <li><a href="./privacy.html" style="color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; position: relative;">Privacy Policy</a></li>
+                    <li><a href="./terms_of_use.html" style="color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; position: relative;">Terms of Use</a></li>
+                </ul>
+                
+                <ul style="width: 100%; display: flex; justify-content: center; gap: 15px; list-style: none; margin: 30px 0 10px; padding: 0;">
+                    <li><a href="https://www.instagram.com/aryan_sharma0312" class="fa fa-instagram" style="color: #fff; background-color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: all 0.3s ease;"></a></li>
+                    <li><a href="https://www.x.com/AryanSh49511166" class="fa fa-twitter" style="color: #fff; background-color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: all 0.3s ease;"></a></li>
+                    <li><a href="https://www.linkedin.com/in/aryan-sharma-68b0b7290" class="fa fa-linkedin" style="color: #fff; background-color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: all 0.3s ease;"></a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Search functionality
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const text = document.getElementById('search-text').value
+            console.log(text)
+            const url = `https://www.googleapis.com/youtube/v3/search?key=AIzaSyC_2CwII3K3NSMxEUzr-XizxknlEvr0N5s&part=snippet&q=${text}&maxResults=50`
+            const xhr = new XMLHttpRequest()
+            xhr.open('GET', url)
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+                    const response = JSON.parse(xhr.responseText)
+                    console.log(response)
+                    let output = ''
+                    for(let i=0; i < response.items.length; i++) {
+                        if(response.items[i].id.videoId) {
+                            output += `
+                                <div>
+                                    <a href="https://www.youtube.com/watch?v=${response.items[i].id.videoId}" target="_blank">
+                                        <img src="${response.items[i].snippet.thumbnails.high.url}" alt="${response.items[i].snippet.title}" />
+                                        <h4>${response.items[i].snippet.title}</h4>
+                                        <p>${response.items[i].snippet.description}</p>
+                                    </a>
+                                </div>   
+                            `
+                        }
+                    }
+                    document.getElementById('my-div').innerHTML = output
+                }
+            }
+            xhr.send()
+        })
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
